@@ -4,30 +4,7 @@ import WeatherWidget from './WeatherWidget';
 import StatsCard from './StatsCard';
 import ActivityFeed from './ActivityFeed';
 import AddProduceForm from './AddProduceForm';
-
-interface User {
-  name: string;
-  xp: number;
-  level: number;
-  location: string;
-}
-
-interface Produce {
-  id: number;
-  name: string;
-  quantity: number;
-  location: string;
-  addedAt: string;
-}
-
-interface Order {
-  id: number;
-  produceName: string;
-  quantity: number;
-  buyer: string;
-  status: string;
-  createdAt: string;
-}
+import { User, Produce, Order, Activity } from '@/types';
 
 interface DashboardProps {
   userProfile: User;
@@ -46,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userProfile, onAddProduce, produc
     completedOrders: orders.filter(order => order.status === 'completed').length
   };
 
-  const recentActivities = [
+  const recentActivities: Activity[] = [
     ...produce.slice(-3).map(item => ({
       id: `produce-${item.id}`,
       action: `Added ${item.quantity}kg of ${item.name}`,

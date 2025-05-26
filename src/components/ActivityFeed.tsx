@@ -1,12 +1,6 @@
 
 import React from 'react';
-
-interface Activity {
-  id: number;
-  action: string;
-  time: string;
-  emoji: string;
-}
+import { Activity } from '@/types';
 
 interface ActivityFeedProps {
   activities: Activity[];
@@ -16,23 +10,29 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
       <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-        <span className="mr-2">📝</span>
+        <span className="mr-2">📊</span>
         Recent Activity
       </h3>
-      <div className="space-y-4">
-        {activities.map((activity) => (
-          <div key={activity.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <div className="text-2xl">{activity.emoji}</div>
-            <div className="flex-1">
-              <p className="text-gray-800 font-medium">{activity.action}</p>
-              <p className="text-gray-500 text-sm">{activity.time}</p>
+      
+      {activities.length === 0 ? (
+        <div className="text-center py-8">
+          <div className="text-4xl mb-2">🌱</div>
+          <p className="text-gray-500">No recent activity</p>
+          <p className="text-sm text-gray-400">Start adding produce to see activity here</p>
+        </div>
+      ) : (
+        <div className="space-y-3 max-h-80 overflow-y-auto">
+          {activities.map((activity) => (
+            <div key={activity.id} className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-green-50 transition-colors">
+              <div className="text-2xl mr-3">{activity.emoji}</div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-800">{activity.action}</p>
+                <p className="text-xs text-gray-500">{activity.time}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <button className="w-full mt-4 text-green-600 hover:text-green-700 font-medium py-2 hover:bg-green-50 rounded-lg transition-colors">
-        View All Activities →
-      </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
