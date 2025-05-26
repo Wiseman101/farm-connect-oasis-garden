@@ -1,20 +1,20 @@
-
 import React from 'react';
 import { Home, Package, Truck, MessageCircle, User, Settings, LogOut } from 'lucide-react';
 
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange, onLogout }) => {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home, emoji: '🏠' },
-    { id: 'produce', label: 'My Produce', icon: Package, emoji: '🥬' },
-    { id: 'orders', label: 'Orders', icon: Truck, emoji: '🚚' },
-    { id: 'messages', label: 'Messages', icon: MessageCircle, emoji: '💬' },
-    { id: 'profile', label: 'Profile', icon: User, emoji: '👨‍🌾' },
-    { id: 'settings', label: 'Settings', icon: Settings, emoji: '⚙️' },
+    { id: 'dashboard', label: 'Dashboard', emoji: '🏠' },
+    { id: 'produce', label: 'My Produce', emoji: '🥬' },
+    { id: 'orders', label: 'Orders', emoji: '🚚' },
+    { id: 'messages', label: 'Messages', emoji: '💬' },
+    { id: 'profile', label: 'Profile', emoji: '👨‍🌾' },
+    { id: 'settings', label: 'Settings', emoji: '⚙️' },
   ];
 
   return (
@@ -46,7 +46,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
         ))}
         
         <div className="border-t border-green-100 mt-6 pt-6">
-          <button className="w-full flex items-center space-x-3 px-6 py-3 text-left hover:bg-red-50 transition-colors text-red-600">
+          <button 
+            onClick={onLogout}
+            className="w-full flex items-center space-x-3 px-6 py-3 text-left hover:bg-red-50 transition-colors text-red-600"
+          >
             <span className="text-xl">🚪</span>
             <span className="font-medium">Logout</span>
           </button>

@@ -1,35 +1,65 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WeatherWidget from './WeatherWidget';
 import StatsCard from './StatsCard';
 import ActivityFeed from './ActivityFeed';
 import AddProduceForm from './AddProduceForm';
 
-interface DashboardProps {
-  userProfile: {
-    name: string;
-    xp: number;
-    level: number;
-  };
-  onAddProduce: (produce: any) => void;
+interface User {
+  name: string;
+  xp: number;
+  level: number;
+  location: string;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ userProfile, onAddProduce }) => {
+interface Produce {
+  id: number;
+  name: string;
+  quantity: number;
+  location: string;
+  addedAt: string;
+}
+
+interface Order {
+  id: number;
+  produceName: string;
+  quantity: number;
+  buyer: string;
+  status: string;
+  createdAt: string;
+}
+
+interface DashboardProps {
+  userProfile: User;
+  onAddProduce: (produce: any) => void;
+  produce: Produce[];
+  orders: Order[];
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ userProfile, onAddProduce, produce, orders }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   
   const stats = {
-    totalProduce: 24,
-    totalQuantity: 1250,
-    activeOrders: 8,
-    completedOrders: 47
+    totalProduce: produce.length,
+    totalQuantity: produce.reduce((sum, item) => sum + item.quantity, 0),
+    activeOrders: orders.filter(order => order.status === 'active').length,
+    completedOrders: orders.filter(order => order.status === 'completed').length
   };
 
-  const activities = [
-    { id: 1, action: 'Added 50kg of Tomatoes', time: '2 hours ago', emoji: '🍅' },
-    { id: 2, action: 'Order #1234 shipped', time: '4 hours ago', emoji: '📦' },
-    { id: 3, action: 'Received order for Carrots', time: '1 day ago', emoji: '🥕' },
-    { id: 4, action: 'Updated inventory levels', time: '2 days ago', emoji: '📊' },
-  ];
+  const recentActivities = [
+    ...produce.slice(-3).map(item => ({
+      id: `produce-${item.id}`,
+      action: `Added ${item.quantity}kg of ${item.name}`,
+      time: new Date(item.addedAt).toLocaleDateString(),
+      emoji: '🌱'
+    })),
+    ...orders.slice(-2).map(order => ({
+      id: `order-${order.id}`,
+      action: `Order for ${order.quantity}kg ${order.produceName}`,
+      time: new Date(order.createdAt).toLocaleDateString(),
+      emoji: '📦'
+    }))
+  ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 4);
 
   return (
     <div className="space-y-6">
@@ -115,7 +145,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userProfile, onAddProduce }) => {
         </div>
 
         {/* Activity Feed */}
-        <ActivityFeed activities={activities} />
+        <ActivityFeed activities={recentActivities} />
       </div>
 
       {/* Add Produce Modal */}

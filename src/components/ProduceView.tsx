@@ -26,8 +26,16 @@ const ProduceView: React.FC<ProduceViewProps> = ({ produce, onAddProduce }) => {
       corn: '🌽',
       apples: '🍎',
       bananas: '🍌',
+      cucumbers: '🥒',
+      onions: '🧅',
+      beans: '🫛',
+      peppers: '🌶️',
+      broccoli: '🥦',
+      strawberries: '🍓',
+      oranges: '🍊',
+      mangoes: '🥭',
     };
-    return emojiMap[name] || '🥬';
+    return emojiMap[name.toLowerCase()] || '🥬';
   };
 
   const formatDate = (dateString: string) => {
